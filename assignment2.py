@@ -143,32 +143,33 @@ class GarbageClassifier(nn.Module):
         return self.classifier(combined_features)
 
 # Training function
-def train_model(model, dataloaders, criterion, optimizer, tokenizer_manager):
+def train_model(model, dataloaders, criterion, optimizer):
     best_acc = 0.0
 
     for epoch in range(NUM_EPOCHS):
         print(f"Epoch {epoch + 1}/{NUM_EPOCHS}")
-        
+
         for phase in ["train", "val"]:
             model.train() if phase == "train" else model.eval()
-            
             running_loss = 0.0
             running_corrects = 0
+            
+            # Initialize tokenizer
+            tokenizer_manager = TokenizerManager(model_name="distilbert-base-uncased", max_length=128)
             
             for batch in dataloaders[phase]:
                 images = batch["image"].to(DEVICE)
                 labels = batch["label"].to(DEVICE)
                 descriptions = batch["description"]
-
+                
+                # Tokenize descriptions
                 tokens = tokenizer_manager.tokenize(descriptions=descriptions, device=DEVICE)
                 input_ids = tokens["input_ids"]
                 attention_mask = tokens["attention_mask"]
 
                 optimizer.zero_grad()
-                
                 with torch.set_grad_enabled(phase == "train"):
-                    outputs = model(images, input_ids=input_ids,
-                                    attention_mask=attention_mask)
+                    outputs = model(images, input_ids=input_ids, attention_mask=attention_mask)
                     loss = criterion(outputs, labels)
                     _, preds = torch.max(outputs, dim=1)
 
@@ -193,10 +194,12 @@ def train_model(model, dataloaders, criterion, optimizer, tokenizer_manager):
     return model
 
 # Prediction function
-def predict(model, dataloader, tokenizer_manager):
+def predict(model, dataloader):
     model.eval()
     predictions, true_labels = [], []
-
+    
+    tokenizer_manager = TokenizerManager(model_name="distilbert-base-uncased", max_length=128)
+    
     with torch.no_grad():
         for batch in dataloader:
             images = batch["image"].to(DEVICE)
@@ -207,8 +210,7 @@ def predict(model, dataloader, tokenizer_manager):
             input_ids = tokens["input_ids"]
             attention_mask = tokens["attention_mask"]
 
-            outputs = model(images, input_ids=input_ids,
-                            attention_mask=attention_mask)
+            outputs = model(images, input_ids=input_ids, attention_mask=attention_mask)
             _, preds = torch.max(outputs, dim=1)
 
             predictions.extend(preds.cpu().numpy())
@@ -219,21 +221,21 @@ def predict(model, dataloader, tokenizer_manager):
 
 if __name__ == "__main__":
     print("executing main..")
-    tokenizer_manager = TokenizerManager(model_name="distilbert-base-uncased", max_length=128)
+    
+    # Initialize model and other components
     model = GarbageClassifier().to(DEVICE)
-
     criterion = nn.CrossEntropyLoss()
     optimizer = AdamW(model.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
+
     print("Loading images..")
     dataloaders_dict = prepare_dataloaders()
-    
+
     print("Starting training..")
     trained_model = train_model(
         model=model,
         dataloaders=dataloaders_dict,
         criterion=criterion,
         optimizer=optimizer,
-        tokenizer_manager=tokenizer_manager,
     )
 
     model.load_state_dict(torch.load("best_model.pth"))
@@ -241,12 +243,9 @@ if __name__ == "__main__":
     predictions_test_set, true_labels_test_set = predict(
         model=model,
         dataloader=dataloaders_dict["test"],
-        tokenizer_manager=tokenizer_manager,
     )
 
-    print(classification_report(true_labels_test_set,
-                                predictions_test_set,
-                                target_names=CLASS_NAMES))
+    print(classification_report(true_labels_test_set, predictions_test_set, target_names=CLASS_NAMES))
 
     cmatrix_test_set = confusion_matrix(true_labels_test_set,
                                         predictions_test_set)
