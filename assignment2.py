@@ -70,7 +70,7 @@ def prepare_dataloaders():
         "test": CustomImageDatasetWithDescription(TEST_DIR, transform=get_transforms("test")),
     }
     dataloaders_dict = {
-        phase: DataLoader(datasets_dict[phase], batch_size=BATCH_SIZE, shuffle=(phase == "train"), num_workers=1)
+        phase: DataLoader(datasets_dict[phase], batch_size=BATCH_SIZE, shuffle=(phase == "train"), num_workers=4)
         for phase in ["train", "val", "test"]
     }
     return dataloaders_dict
