@@ -1,0 +1,51 @@
+cuda
+Loading images..
+Starting training..
+Epoch 1/10
+Train Loss: 1.1010 Acc: 0.7848
+Val Loss: 0.8403 Acc: 0.8361
+New best model saved with accuracy: 0.8361
+Epoch 2/10
+Train Loss: 0.8622 Acc: 0.8751
+Val Loss: 0.6572 Acc: 0.8428
+New best model saved with accuracy: 0.8428
+Epoch 3/10
+Train Loss: 0.7012 Acc: 0.8925
+Val Loss: 0.5465 Acc: 0.8511
+New best model saved with accuracy: 0.8511
+Epoch 4/10
+Train Loss: 0.5704 Acc: 0.9110
+Val Loss: 0.4554 Acc: 0.8828
+New best model saved with accuracy: 0.8828
+Epoch 5/10
+Train Loss: 0.4749 Acc: 0.9222
+Val Loss: 0.4291 Acc: 0.8689
+Epoch 6/10
+Train Loss: 0.3988 Acc: 0.9309
+Val Loss: 0.4042 Acc: 0.8856
+New best model saved with accuracy: 0.8856
+Epoch 7/10
+Train Loss: 0.3350 Acc: 0.9393
+Val Loss: 0.3643 Acc: 0.8950
+New best model saved with accuracy: 0.8950
+Epoch 8/10
+Train Loss: 0.2869 Acc: 0.9474
+Val Loss: 0.3802 Acc: 0.8922
+Epoch 9/10
+Train Loss: 0.2468 Acc: 0.9512
+Val Loss: 0.3819 Acc: 0.8867
+Epoch 10/10
+Train Loss: 0.2114 Acc: 0.9585
+Val Loss: 0.3683 Acc: 0.8911
+Training complete. Best validation accuracy: 0.8950
+              precision    recall  f1-score   support
+
+        Blue       0.82      0.71      0.76       695
+       Black       0.79      0.95      0.86      1086
+       Green       0.93      0.91      0.92       799
+         TTR       0.89      0.78      0.83       852
+
+    accuracy                           0.85      3432
+   macro avg       0.86      0.83      0.84      3432
+weighted avg       0.85      0.85      0.85      3432
+
