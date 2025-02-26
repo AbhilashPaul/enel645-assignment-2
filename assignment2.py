@@ -4,27 +4,33 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
-from torchvision import datasets, transforms, models
+from torchvision import datasets, transforms
+from torchvision.models import resnet50, ResNet50_Weights
 from transformers import DistilBertModel, AutoTokenizer
 from torch.optim import AdamW
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+print(f"Is GPU available? {torch.cuda.is_available()}")  # Should return True
+print(f"Device count: {torch.cuda.device_count()}")  # Should return at least 1
+
+
 # Constants
-DATA_DIR = r"garbage_data"
+DATA_DIR = r"/work/TALC/enel645_2025w/garbage_data"
 TRAIN_DIR = os.path.join(DATA_DIR, "CVPR_2024_dataset_Train")
 VAL_DIR = os.path.join(DATA_DIR, "CVPR_2024_dataset_Val")
 TEST_DIR = os.path.join(DATA_DIR, "CVPR_2024_dataset_Test")
 IMAGE_SIZE = (224, 224)
 NORMALIZATION_MEAN = [0.485, 0.456, 0.406]
 NORMALIZATION_STD = [0.229, 0.224, 0.225]
-BATCH_SIZE = 8
+BATCH_SIZE = 32
 LEARNING_RATE = 5e-5
 WEIGHT_DECAY = 0.01
-NUM_EPOCHS = 5
+NUM_EPOCHS = 10
 CLASS_NAMES = ['Blue', 'Black', 'Green', 'TTR']
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(DEVICE)
 
 # Define transformations
 def get_transforms(phase: str):
@@ -64,7 +70,7 @@ def prepare_dataloaders():
         "test": CustomImageDatasetWithDescription(TEST_DIR, transform=get_transforms("test")),
     }
     dataloaders_dict = {
-        phase: DataLoader(datasets_dict[phase], batch_size=BATCH_SIZE, shuffle=(phase == "train"))
+        phase: DataLoader(datasets_dict[phase], batch_size=BATCH_SIZE, shuffle=(phase == "train"), num_workers=4)
         for phase in ["train", "val", "test"]
     }
     return dataloaders_dict
@@ -94,7 +100,7 @@ class TokenizerManager:
 class ResNet50FeatureExtractor(nn.Module):
     def __init__(self):
         super().__init__()
-        self.model = models.resnet50(pretrained=True)
+        self.model = resnet50(weights=ResNet50_Weights.IMAGENET1K_V1)
         self.model.fc = nn.Identity()
 
     def forward(self, x):
@@ -212,12 +218,13 @@ def predict(model, dataloader, tokenizer_manager):
 
 
 if __name__ == "__main__":
+    print("executing main..")
     tokenizer_manager = TokenizerManager(model_name="distilbert-base-uncased", max_length=128)
     model = GarbageClassifier().to(DEVICE)
 
     criterion = nn.CrossEntropyLoss()
     optimizer = AdamW(model.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
-
+    print("Loading images..")
     dataloaders_dict = prepare_dataloaders()
     
     print("Starting training..")
