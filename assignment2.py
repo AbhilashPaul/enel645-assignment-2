@@ -12,8 +12,8 @@ from sklearn.metrics import confusion_matrix, classification_report, accuracy_sc
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-print(f"Is GPU available? {torch.cuda.is_available()}")  # Should return True
-print(f"Device count: {torch.cuda.device_count()}")  # Should return at least 1
+#print(f"Is GPU available? {torch.cuda.is_available()}")  # Should return True
+#print(f"Device count: {torch.cuda.device_count()}")  # Should return at least 1
 
 
 # Constants
@@ -220,7 +220,6 @@ def predict(model, dataloader):
 
 
 if __name__ == "__main__":
-    print("executing main..")
     
     # Initialize model and other components
     model = GarbageClassifier().to(DEVICE)
