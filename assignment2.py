@@ -237,7 +237,7 @@ if __name__ == "__main__":
         optimizer=optimizer,
     )
 
-    model.load_state_dict(torch.load("best_model.pth"))
+    model.load_state_dict(torch.load("best_model.pth", weights_only=True))
 
     predictions_test_set, true_labels_test_set = predict(
         model=model,
