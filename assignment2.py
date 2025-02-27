@@ -30,7 +30,6 @@ WEIGHT_DECAY = 0.01
 NUM_EPOCHS = 15
 CLASS_NAMES = ['Blue', 'Black', 'Green', 'TTR']
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(DEVICE)
 
 # Define transformations
 def get_transforms(phase: str):
@@ -78,8 +77,15 @@ def prepare_dataloaders():
 # Tokenizer Manager for management of tokenization logic
 class TokenizerManager:
     def __init__(self, model_name: str = "distilbert-base-uncased", max_length: int = 128):
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        self.model_name = model_name
         self.max_length = max_length
+        self._tokenizer = None  # Lazy initialization
+
+    @property
+    def tokenizer(self):
+        if self._tokenizer is None:
+            self._tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+        return self._tokenizer
 
     def tokenize(self, descriptions: list[str], device: torch.device):
         encoding = self.tokenizer(
@@ -96,7 +102,7 @@ class TokenizerManager:
             "attention_mask": encoding["attention_mask"].to(device),
         }
 
-# Feature extractors and classifier model
+# Image Feature extractor model
 class ResNet50FeatureExtractor(nn.Module):
     def __init__(self):
         super().__init__()
@@ -106,6 +112,7 @@ class ResNet50FeatureExtractor(nn.Module):
     def forward(self, x):
         return self.model(x)
 
+# Text Feature extractor model
 class DistilBERTFeatureExtractor(nn.Module):
     def __init__(self):
         super().__init__()
@@ -115,6 +122,7 @@ class DistilBERTFeatureExtractor(nn.Module):
         outputs = self.model(input_ids=input_ids, attention_mask=attention_mask)
         return outputs.last_hidden_state[:, 0]
 
+# Garbage classifier model
 class GarbageClassifier(nn.Module):
     def __init__(self, num_classes=len(CLASS_NAMES)):
         super().__init__()
@@ -237,15 +245,17 @@ if __name__ == "__main__":
         optimizer=optimizer,
     )
 
+    # model evaluation
     model.load_state_dict(torch.load("best_model.pth", weights_only=True))
-
     predictions_test_set, true_labels_test_set = predict(
         model=model,
         dataloader=dataloaders_dict["test"],
     )
-
+    # print evaluation metrics
+    print(f"Accuracy: {accuracy_score(true_labels_test_set, predictions_test_set):.4f}")
     print(classification_report(true_labels_test_set, predictions_test_set, target_names=CLASS_NAMES))
 
+    # plot confusion matrix
     cmatrix_test_set = confusion_matrix(true_labels_test_set,
                                         predictions_test_set)
 
