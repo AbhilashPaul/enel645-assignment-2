@@ -1,0 +1,68 @@
+Loading images..
+Starting training..
+Epoch 1/15
+Train Loss: 1.1015 Acc: 0.7891
+Val Loss: 0.8352 Acc: 0.8422
+New best model saved with accuracy: 0.8422
+Epoch 2/15
+Train Loss: 0.8695 Acc: 0.8693
+Val Loss: 0.6465 Acc: 0.8456
+New best model saved with accuracy: 0.8456
+Epoch 3/15
+Train Loss: 0.7038 Acc: 0.8904
+Val Loss: 0.5413 Acc: 0.8733
+New best model saved with accuracy: 0.8733
+Epoch 4/15
+Train Loss: 0.5760 Acc: 0.9075
+Val Loss: 0.4619 Acc: 0.8772
+New best model saved with accuracy: 0.8772
+Epoch 5/15
+Train Loss: 0.4809 Acc: 0.9193
+Val Loss: 0.4213 Acc: 0.8889
+New best model saved with accuracy: 0.8889
+Epoch 6/15
+Train Loss: 0.4023 Acc: 0.9293
+Val Loss: 0.3860 Acc: 0.8950
+New best model saved with accuracy: 0.8950
+Epoch 7/15
+Train Loss: 0.3394 Acc: 0.9390
+Val Loss: 0.3838 Acc: 0.8889
+Epoch 8/15
+Train Loss: 0.2870 Acc: 0.9464
+Val Loss: 0.3976 Acc: 0.8894
+Epoch 9/15
+Train Loss: 0.2517 Acc: 0.9494
+Val Loss: 0.3571 Acc: 0.8967
+New best model saved with accuracy: 0.8967
+Epoch 10/15
+Train Loss: 0.2191 Acc: 0.9549
+Val Loss: 0.3664 Acc: 0.8844
+Epoch 11/15
+Train Loss: 0.1877 Acc: 0.9607
+Val Loss: 0.3520 Acc: 0.9006
+New best model saved with accuracy: 0.9006
+Epoch 12/15
+Train Loss: 0.1643 Acc: 0.9656
+Val Loss: 0.3813 Acc: 0.8861
+Epoch 13/15
+Train Loss: 0.1523 Acc: 0.9662
+Val Loss: 0.3718 Acc: 0.8978
+Epoch 14/15
+Train Loss: 0.1323 Acc: 0.9697
+Val Loss: 0.3582 Acc: 0.9006
+Epoch 15/15
+Train Loss: 0.1191 Acc: 0.9731
+Val Loss: 0.3830 Acc: 0.8922
+Training complete. Best validation accuracy: 0.9006
+Accuracy: 0.8456
+              precision    recall  f1-score   support
+
+        Blue       0.78      0.74      0.76       695
+       Black       0.80      0.93      0.86      1086
+       Green       0.94      0.88      0.91       799
+         TTR       0.90      0.79      0.84       852
+
+    accuracy                           0.85      3432
+   macro avg       0.85      0.84      0.84      3432
+weighted avg       0.85      0.85      0.85      3432
+
