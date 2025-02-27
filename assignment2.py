@@ -27,7 +27,7 @@ NORMALIZATION_STD = [0.229, 0.224, 0.225]
 BATCH_SIZE = 32
 LEARNING_RATE = 5e-5
 WEIGHT_DECAY = 0.01
-NUM_EPOCHS = 10
+NUM_EPOCHS = 15
 CLASS_NAMES = ['Blue', 'Black', 'Green', 'TTR']
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(DEVICE)
@@ -153,16 +153,15 @@ def train_model(model, dataloaders, criterion, optimizer):
             model.train() if phase == "train" else model.eval()
             running_loss = 0.0
             running_corrects = 0
-            
-            # Initialize tokenizer
-            tokenizer_manager = TokenizerManager(model_name="distilbert-base-uncased", max_length=128)
-            
+
+            # Process batches
             for batch in dataloaders[phase]:
+                tokenizer_manager = TokenizerManager(model_name="distilbert-base-uncased", max_length=128)
+                # Load data
                 images = batch["image"].to(DEVICE)
                 labels = batch["label"].to(DEVICE)
                 descriptions = batch["description"]
-                
-                # Tokenize descriptions
+
                 tokens = tokenizer_manager.tokenize(descriptions=descriptions, device=DEVICE)
                 input_ids = tokens["input_ids"]
                 attention_mask = tokens["attention_mask"]
@@ -197,11 +196,12 @@ def train_model(model, dataloaders, criterion, optimizer):
 def predict(model, dataloader):
     model.eval()
     predictions, true_labels = [], []
-    
-    tokenizer_manager = TokenizerManager(model_name="distilbert-base-uncased", max_length=128)
-    
+
     with torch.no_grad():
         for batch in dataloader:
+            tokenizer_manager = TokenizerManager(model_name="distilbert-base-uncased", max_length=128)
+
+            # Load data
             images = batch["image"].to(DEVICE)
             labels = batch["label"].to(DEVICE)
             descriptions = batch["description"]
