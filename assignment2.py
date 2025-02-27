@@ -14,7 +14,7 @@ import seaborn as sns
 
 #print(f"Is GPU available? {torch.cuda.is_available()}")  # Should return True
 #print(f"Device count: {torch.cuda.device_count()}")  # Should return at least 1
-
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 # Constants
 DATA_DIR = r"/work/TALC/enel645_2025w/garbage_data"
