@@ -60,3 +60,8 @@ Green: Precision (0.94) is excellent, but recall (0.88) shows room for improveme
 TTR: Precision (0.90) is high, but recall (0.79) is slightly lower due to misclassifications into "Black" (91 cases) and "Blue" (63 cases).
 
 These findings suggest that while the model performs well overall, further fine-tuning or additional data could help improve differentiation between closely related classes like "Blue" and "Black."
+
+
+### Note on usage of jupyter notebook vs python script in TALC
+
+- Initially we tried to use jupyter notebook to train and evaluate the model but it was taking a long time to execute. So, we switched to python script file. That sped up the training process.
