@@ -35,8 +35,8 @@ This assignment focuses on developing a multimodal deep learning model for garba
 
 ## Results and Evaluation
 ### Training Performance
-![training and validation loss](loss_plot.png)
-![training and validation accuracy](accuracy_plot.png)
+![training and validation loss](/analysis/loss_plot.png)
+![training and validation accuracy](/analysis/accuracy_plot.png)
 The training results indicate that the model performs well in classifying garbage categories using a multimodal approach. Training loss steadily decreases from 1.1015 to 0.1191 over 15 epochs, while training accuracy improves from 78.91% to 97.31%, demonstrating effective learning on the training data. Validation loss decreases initially, reaching its lowest point at epoch 11 (0.3520), and validation accuracy peaks at 90.06% in epochs 11 and 14, suggesting good generalization with minimal overfitting. However, slight fluctuations in validation metrics toward the end may indicate the need for early stopping to achieve optimal performance.
 
 ### Final Evaluation
