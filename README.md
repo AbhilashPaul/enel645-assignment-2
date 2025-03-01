@@ -64,4 +64,7 @@ These findings suggest that while the model performs well overall, further fine-
 
 ### Note on usage of jupyter notebook vs python script in TALC
 
-- Initially we tried to use jupyter notebook to train and evaluate the model but it was taking a long time to execute. So, we switched to python script file. That sped up the training process.
+We tried to use jupyter notebook to train and evaluate the model but it was taking a long time to execute. So, we switched to python script file. That sped up the training process.
+
+Sample attempt to run jupyter notebook: Job was not finish even after 6 hours and was terminated due to reaching the time limit set in the slurm file. 
+![output from trying to run jupyter notebook](/jupyter_notebook_trial.png)
